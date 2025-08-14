@@ -10,7 +10,7 @@ Dataset: Titanic dataset from Kaggle.
 **Key Steps:**
 - Data preprocessing (handling missing values, encoding categorical features).
 - Exploratory Data Analysis (EDA).
-- Training models such as Logistic Regression, Random Forest.
+- Training models such as Logistic Regression, Random .
 - Model evaluation using accuracy and confusion matrix.
 
 **Tech Stack:** Python, Pandas, Seaborn, Matplotlib, Scikit-learn.
@@ -20,10 +20,10 @@ Dataset: Titanic dataset from Kaggle.
 ## Task 2: Iris Flower Classification
 
 **Goal:** Classify iris flowers into species based on their features.  
-**Dataset:** Iris dataset from Scikit-learn.  
+**Dataset:** Iris dataset from Kaggle.  
 **Key Steps:**
 - Exploratory Data Analysis (EDA) and visualization.
-- Model training with Logistic Regression and Decision Tree.
+- Model training with Logistic Regression.
 - Model evaluation using accuracy score.
 
 Tech Stack: Python, Pandas, Matplotlib, Seaborn, Scikit-learn.
