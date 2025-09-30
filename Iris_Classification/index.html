@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Well-being Dashboard</title>
+  <!-- Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <div id="app" class="max-w-6xl mx-auto p-6 space-y-6">
+
+    <!-- Header -->
+    <header class="text-center">
+      <h1 class="text-3xl font-bold text-blue-700">Digital Well-being Dashboard</h1>
+      <p class="text-gray-600">Track and improve your digital habits</p>
+    </header>
+
+    <!-- Total Screen Time -->
+    <section class="bg-white p-6 rounded-lg shadow-md text-center">
+      <h2 class="text-xl font-semibold mb-2">Total Screen Time (Today)</h2>
+      <p class="text-3xl font-bold text-blue-600">{{ totalScreenTime }} mins</p>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- App/Website Usage Pie -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-lg font-semibold mb-4">App/Website Usage</h2>
+        <canvas id="usagePieChart"></canvas>
+      </div>
+
+      <!-- Daily/Weekly/Monthly Trend -->
+      <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-lg font-semibold mb-4">Usage Trend</h2>
+        <div class="flex space-x-2 mb-2">
+          <button @click="setView('daily')" 
+                  :class="buttonClass('daily')">Daily</button>
+          <button @click="setView('weekly')" 
+                  :class="buttonClass('weekly')">Weekly</button>
+          <button @click="setView('monthly')" 
+                  :class="buttonClass('monthly')">Monthly</button>
+        </div>
+        <canvas id="trendChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Wellness Suggestions -->
+    <section class="bg-green-100 p-6 rounded-lg shadow-md">
+      <h2 class="text-lg font-semibold text-green-700 mb-2">Wellness Suggestions</h2>
+      <ul class="list-disc list-inside text-gray-800 space-y-1">
+        <li v-for="suggestion in wellnessTips">{{ suggestion }}</li>
+      </ul>
+    </section>
+
+  </div>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        totalScreenTime: 450, // example in minutes
+        currentView: "daily",
+        wellnessTips: [
+          "Take a 5-minute break every hour.",
+          "Use Focus Mode during work sessions.",
+          "Try a 10-minute mindfulness video before bed."
+        ],
+        charts: {}
+      },
+      methods: {
+        setView(view) {
+          this.currentView = view;
+          this.renderTrendChart();
+        },
+        buttonClass(view) {
+          return this.currentView === view 
+            ? "bg-blue-600 text-white px-3 py-1 rounded"
+            : "bg-gray-200 text-gray-700 px-3 py-1 rounded";
+        },
+        renderCharts() {
+          // Pie Chart
+          const pieData = {
+            labels: ["Social Media", "Work", "Entertainment", "Learning"],
+            datasets: [{
+              data: [120, 180, 90, 60],
+              backgroundColor: ["#f87171", "#60a5fa", "#fbbf24", "#34d399"]
+            }]
+          };
+          this.charts.pie = new Chart(
+            document.getElementById("usagePieChart"), 
+            { type: "pie", data: pieData }
+          );
+          this.renderTrendChart();
+        },
+        renderTrendChart() {
+          const ctx = document.getElementById("trendChart");
+          if (this.charts.trend) this.charts.trend.destroy();
+
+          let labels, data;
+          if (this.currentView === "daily") {
+            labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+            data = [300, 250, 400, 350, 280, 500, 450];
+          } else if (this.currentView === "weekly") {
+            labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+            data = [2100, 1900, 2300, 2000];
+          } else {
+            labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+            data = [9000, 8500, 10000, 9500, 8700, 11000];
+          }
+
+          this.charts.trend = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [{
+                label: "Screen Time (minutes)",
+                data: data,
+                backgroundColor: "#3b82f6"
+              }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+          });
+        }
+      },
+      mounted() {
+        this.renderCharts();
+      }
+    });
+  </script>
+</body>
+</html>
